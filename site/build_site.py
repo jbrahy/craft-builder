@@ -32,7 +32,7 @@ def human_size(n):
 
 
 def files_in(d):
-    if not d.is_dir():
+    if d is None or not d.is_dir():
         return []
     return sorted(
         (f for f in d.iterdir() if f.is_file() and not f.name.startswith(".")),
