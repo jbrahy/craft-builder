@@ -50,7 +50,7 @@ fw_allow() {
 
 if [ "$ROLE" = web ]; then
   # ==========================================================================
-  apt-get install -yq --no-install-recommends caddy python3 python3-venv fonts-overpass
+  apt-get install -yq --no-install-recommends caddy python3 python3-venv fonts-atkinson-hyperlegible-web fonts-league-mono
 
   if ! command -v aws >/dev/null; then
     curl -fsSL -o /tmp/awscli.zip https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip

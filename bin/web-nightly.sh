@@ -145,7 +145,9 @@ while IFS=$'\t' read -r r sha; do
     mkdir -p "$dest"
     for f in "$d"*; do
       n=$(basename "$f")
-      [ -f "$f" ] && safe_name "$n" && [ "$n" != SHA256SUMS.txt ] && mv "$f" "$dest/$n"
+      # Package types only: nothing the browser would render as a page.
+      [[ $n =~ \.(zip|tar\.gz|deb|rpm|AppImage|AppImage\.zsync|flatpak)$ ]] || continue
+      [ -f "$f" ] && safe_name "$n" && mv "$f" "$dest/$n"
     done
     if [ -n "$(ls -A "$dest")" ]; then
       (cd "$dest" && sha256sum -- * > SHA256SUMS.txt)

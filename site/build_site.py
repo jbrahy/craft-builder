@@ -336,10 +336,9 @@ def main():
     for f in (SITE_SRC / "assets").iterdir():
         shutil.copyfile(f, assets / f.name)
     for name, src in (
-        ("overpass.otf", "/usr/share/fonts/opentype/overpass/overpass-regular.otf"),
-        ("overpass-bold.otf", "/usr/share/fonts/opentype/overpass/overpass-bold.otf"),
-        ("overpass-heavy.otf", "/usr/share/fonts/opentype/overpass/overpass-heavy.otf"),
-        ("overpass-mono.otf", "/usr/share/fonts/opentype/overpass/overpass-mono-regular.otf"),
+        ("atkinson.woff2", "/usr/share/fonts-atkinson-hyperlegible/woff2/AtkinsonHyperlegible-Regular.woff2"),
+        ("atkinson-bold.woff2", "/usr/share/fonts-atkinson-hyperlegible/woff2/AtkinsonHyperlegible-Bold.woff2"),
+        ("league-mono.otf", "/usr/share/fonts/opentype/league-mono/LeagueMono-Regular.otf"),
     ):
         if Path(src).is_file():
             shutil.copyfile(src, assets / name)

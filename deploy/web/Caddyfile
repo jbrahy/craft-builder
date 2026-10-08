@@ -2,7 +2,18 @@ craft.reach-x.com {
 	root * /srv/craft/public
 	encode gzip
 	file_server browse
-	header Content-Security-Policy "default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+
+	# The site itself: only /assets/site.js may run.
+	header Content-Security-Policy "default-src 'self'; script-src https://craft.reach-x.com/assets/site.js; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
 	header X-Content-Type-Options nosniff
 	header /assets/* Cache-Control "public, max-age=3600"
+
+	# Build output comes from a box that runs unreviewed code: every file there
+	# is a sandboxed download, never a page. Directory listings stay browsable.
+	@artifacts {
+		path /builds/* /upstream/* /git/*
+		not path */
+	}
+	header @artifacts Content-Disposition attachment
+	header @artifacts Content-Security-Policy "sandbox; default-src 'none'"
 }
