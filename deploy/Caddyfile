@@ -1,0 +1,5 @@
+craft.reach-x.com {
+	root * /srv/craft/public
+	encode gzip
+	file_server browse
+}

@@ -1,0 +1,30 @@
+[Unit]
+Description=craft nightly: mirror storytold repos, build linux and windows, mirror macOS releases
+Wants=network-online.target
+After=network-online.target
+OnSuccess=craft-report.service
+OnFailure=craft-report.service
+
+[Service]
+Type=oneshot
+User=builder
+Group=craft
+Environment=HOME=/srv/craft/home/builder
+Environment=RUSTUP_HOME=/srv/craft/toolchain/rustup
+Environment=CARGO_HOME=/srv/craft/toolchain/cargo
+Environment=PATH=/srv/craft/toolchain/cargo/bin:/usr/local/bin:/usr/bin:/bin
+Environment=CARGO_BUILD_JOBS=8
+# Accepts the Microsoft Windows SDK/CRT license (approved 2026-10-08).
+Environment=XWIN_ACCEPT_LICENSE=1
+Environment=XWIN_CACHE_DIR=/srv/craft/toolchain/xwin
+ExecStart=/usr/bin/flock -n /srv/craft/.nightly.lock /opt/craft-builder/bin/nightly.sh
+TimeoutStartSec=14h
+Nice=10
+UMask=0022
+# Builds run unreviewed upstream code: no privileges, writes only to /srv/craft.
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/srv/craft
+InaccessiblePaths=/etc/craft

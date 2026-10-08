@@ -1,0 +1,14 @@
+[Unit]
+Description=Email the craft nightly result
+
+[Service]
+Type=oneshot
+User=craft-report
+Group=craft
+Environment=HOME=/tmp
+EnvironmentFile=/etc/craft/ses.env
+ExecStart=/opt/craft-builder/bin/report.sh
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes

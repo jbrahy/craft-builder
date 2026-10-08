@@ -1,0 +1,9 @@
+[Unit]
+Description=Run craft-nightly at 01:00 Pacific
+
+[Timer]
+OnCalendar=*-*-* 01:00:00 America/Los_Angeles
+Persistent=true
+
+[Install]
+WantedBy=timers.target
