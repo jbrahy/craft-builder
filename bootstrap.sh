@@ -22,7 +22,9 @@ DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
   build-essential pkg-config clang lld llvm cmake nasm git curl jq unzip zip file \
   ca-certificates rpm zsync desktop-file-utils appstream python3-yaml \
   libxkbcommon-dev libwayland-dev libx11-dev libxrandr-dev libxi-dev \
-  libgl1-mesa-dev libssl-dev libfontconfig-dev libasound2-dev libudev-dev caddy iptables-persistent
+  libgl1-mesa-dev libssl-dev libfontconfig-dev libasound2-dev libudev-dev caddy iptables-persistent \
+  ninja-build golang-go libgtk-3-dev libwebkit2gtk-4.1-dev libsoup-3.0-dev \
+  libayatana-appindicator3-dev librsvg2-dev
 
 if ! command -v nfpm >/dev/null; then
   curl -fsSL -o /tmp/nfpm.deb "https://github.com/goreleaser/nfpm/releases/download/v${NFPM_VERSION}/nfpm_${NFPM_VERSION}_amd64.deb"
