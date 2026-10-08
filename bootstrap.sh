@@ -22,7 +22,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
   build-essential pkg-config clang lld llvm cmake nasm git curl jq unzip zip file \
   ca-certificates rpm zsync desktop-file-utils appstream python3-yaml \
   libxkbcommon-dev libwayland-dev libx11-dev libxrandr-dev libxi-dev \
-  libgl1-mesa-dev libssl-dev libfontconfig-dev libasound2-dev libudev-dev caddy
+  libgl1-mesa-dev libssl-dev libfontconfig-dev libasound2-dev libudev-dev caddy iptables-persistent
 
 if ! command -v nfpm >/dev/null; then
   curl -fsSL -o /tmp/nfpm.deb "https://github.com/goreleaser/nfpm/releases/download/v${NFPM_VERSION}/nfpm_${NFPM_VERSION}_amd64.deb"
@@ -34,6 +34,17 @@ if ! command -v aws >/dev/null; then
   (cd /tmp && unzip -q -o awscli.zip && ./aws/install)
   rm -rf -- /tmp/aws /tmp/awscli.zip
 fi
+
+# --- host firewall ----------------------------------------------------------
+# Ubuntu OCI images ship an iptables REJECT rule in INPUT, so 80 and 443 must be
+# opened here as well as in the NSG. Same approach as reach-x/feedback.
+for p in 80 443; do
+  if ! iptables -C INPUT -p tcp --dport "$p" -m conntrack --ctstate NEW -j ACCEPT 2>/dev/null; then
+    pos=$(iptables -L INPUT --line-numbers -n | awk '$2=="REJECT"{print $1; exit}')
+    iptables -I INPUT "${pos:-1}" -p tcp --dport "$p" -m conntrack --ctstate NEW -j ACCEPT
+  fi
+done
+netfilter-persistent save >/dev/null
 
 # --- data volume ------------------------------------------------------------
 # Format only a device with no filesystem at all, never a mounted one.
