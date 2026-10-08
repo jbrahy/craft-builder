@@ -38,6 +38,7 @@ else
     awk -F'\t' '$2 == "macos" && $3 == "ok" {printf "  %-22s %s\n", $1, $4}' "$STATUS"
     echo
     awk -F'\t' '$2 == "disk" {print "Disk /srv/craft (used, size, pct): " $4}' "$STATUS"
+    awk -F"\t" '$2 == "builder" {print "Builder: " $3 ", " $4}' "$STATUS"
     for f in $(awk -F'\t' '$3 == "fail" && ($2 == "linux" || $2 == "windows") {print $1 "-" $2}' "$STATUS"); do
       echo
       echo "--- tail of $f.log"

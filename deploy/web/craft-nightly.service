@@ -1,0 +1,22 @@
+[Unit]
+Description=craft nightly: mirror storytold, drive the builder, publish, regenerate the site
+Wants=network-online.target
+After=network-online.target
+OnSuccess=craft-report.service
+OnFailure=craft-report.service
+
+[Service]
+Type=oneshot
+User=craft
+Group=craft
+Environment=HOME=/srv/craft/home/craft
+Environment=PATH=/opt/oci-cli/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/flock -n /srv/craft/.nightly.lock /opt/craft-builder/bin/web-nightly.sh
+TimeoutStartSec=14h
+UMask=0022
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/srv/craft
+InaccessiblePaths=/etc/craft

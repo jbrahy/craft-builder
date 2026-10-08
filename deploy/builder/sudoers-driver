@@ -1,0 +1,2 @@
+# craft-web's ssh user on the builder may start the build unit and nothing else.
+driver ALL=(root) NOPASSWD: /usr/bin/systemctl start craft-build.service

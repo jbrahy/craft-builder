@@ -1,0 +1,8 @@
+craft.reach-x.com {
+	root * /srv/craft/public
+	encode gzip
+	file_server browse
+	header Content-Security-Policy "default-src 'self'; script-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+	header X-Content-Type-Options nosniff
+	header /assets/* Cache-Control "public, max-age=3600"
+}

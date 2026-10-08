@@ -1,0 +1,171 @@
+/* craft.reach-x.com. Print-proof palette: process cyan for built, magenta for
+   failed, yellow for upstream-only, on cool proof paper. */
+
+@font-face { font-family: Overpass; src: url(overpass.otf) format("opentype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: Overpass; src: url(overpass-bold.otf) format("opentype"); font-weight: 700; font-display: swap; }
+@font-face { font-family: Overpass; src: url(overpass-heavy.otf) format("opentype"); font-weight: 900; font-display: swap; }
+@font-face { font-family: "Overpass Mono"; src: url(overpass-mono.otf) format("opentype"); font-display: swap; }
+
+:root {
+  --paper: #f1f3f5;
+  --sheet: #ffffff;
+  --ink: #14161b;
+  --ink-soft: #545a66;
+  --rule: #d5d9df;
+  --cyan: #0093c9;
+  --magenta: #c8155f;
+  --yellow: #e8b800;
+  --partial: linear-gradient(135deg, var(--cyan) 50%, var(--magenta) 50%);
+  --measure: 68ch;
+  --step: 1.25rem;
+}
+
+* { box-sizing: border-box; }
+
+html { background: var(--paper); color: var(--ink); }
+
+body {
+  margin: 0;
+  font: 400 1rem/1.55 Overpass, "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: "tnum" 1;
+}
+
+a { color: var(--ink); text-decoration-color: var(--cyan); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:hover { color: var(--cyan); }
+:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+
+code, .sum { font-family: "Overpass Mono", ui-monospace, Menlo, monospace; font-size: .85em; }
+
+.top, main, .foot, .proof { max-width: 72rem; margin: 0 auto; padding: 0 1.5rem; }
+
+/* --- header ------------------------------------------------------------ */
+
+.top { padding-top: 3rem; }
+.top h1 {
+  margin: 0;
+  font-weight: 900;
+  font-size: clamp(2.6rem, 7vw, 5.2rem);
+  line-height: .95;
+  letter-spacing: -.02em;
+  display: flex; align-items: center; gap: .4em;
+}
+.lede { max-width: var(--measure); font-size: 1.15rem; color: var(--ink-soft); margin: 1rem 0 0; }
+.crumb { margin: 0 0 .5rem; }
+
+/* --- proof strip: the one loud element --------------------------------- */
+
+.proof { margin-top: 2.5rem; }
+.strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(1.6rem, 1fr));
+  gap: 3px;
+  padding: 6px;
+  background: var(--ink);
+}
+.tile { display: block; aspect-ratio: 1; background: var(--rule); }
+.tile:hover, .tile:focus-visible { outline: 3px solid var(--sheet); outline-offset: -3px; }
+
+.built { background: var(--cyan); }
+.failed { background: var(--magenta); }
+.partial { background: var(--partial); }
+.upstream { background: var(--yellow); }
+.mirror { background: #9aa1ac; }
+
+.legend { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; list-style: none; padding: 0; margin: .9rem 0 0; color: var(--ink-soft); font-size: .9rem; }
+.legend li { display: flex; align-items: center; gap: .45rem; }
+.summary { margin: .4rem 0 0; font-weight: 700; }
+
+.swatch { display: inline-block; width: .9rem; height: .9rem; flex: none; }
+.swatch.small { width: .7rem; height: .7rem; margin-right: .5rem; vertical-align: -1px; }
+h1 .swatch { width: .5em; height: .5em; }
+
+/* --- apps -------------------------------------------------------------- */
+
+main h2 {
+  font-weight: 900;
+  font-size: 1.9rem;
+  letter-spacing: -.01em;
+  margin: 3.5rem 0 1rem;
+  padding-bottom: .4rem;
+  border-bottom: 4px solid var(--ink);
+}
+
+.app {
+  display: grid;
+  grid-template-columns: minmax(16rem, 1fr) 2fr;
+  gap: 1.5rem 2.5rem;
+  padding: 1.6rem 0;
+  border-bottom: 1px solid var(--rule);
+  scroll-margin-top: 1rem;
+}
+.app:target { background: var(--sheet); box-shadow: 0 0 0 1rem var(--sheet); }
+.app-head { display: grid; grid-template-columns: auto 1fr; column-gap: .7rem; align-content: start; }
+.app-head .swatch { margin-top: .5rem; }
+.app h3 { margin: 0; font-size: 1.6rem; font-weight: 900; line-height: 1.2; }
+.app h3 a { text-decoration: none; }
+.app h3 a:hover { text-decoration: underline; text-decoration-color: var(--cyan); }
+.desc, .meta { grid-column: 2; margin: .3rem 0 0; }
+.desc { max-width: 46ch; }
+.meta { color: var(--ink-soft); font-size: .9rem; }
+
+.dls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; align-content: start; }
+.dl h4 { margin: 0 0 .4rem; font-size: .95rem; font-weight: 700; color: var(--ink-soft); }
+.dl .none { margin: 0; color: var(--ink-soft); font-size: .9rem; }
+
+.file {
+  display: flex; justify-content: space-between; gap: .75rem;
+  padding: .55rem .7rem;
+  margin-bottom: .35rem;
+  background: var(--sheet);
+  border: 1px solid var(--rule);
+  border-left: 5px solid var(--cyan);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: .93rem;
+}
+.dl[data-platform="macos"] .file { border-left-color: var(--yellow); }
+.file:hover { border-color: var(--ink); border-left-color: var(--ink); color: var(--ink); }
+.size { color: var(--ink-soft); font-weight: 400; white-space: nowrap; }
+
+/* Your platform first: site.js marks it; the others fold away until asked. */
+.dls.mine .dl:not(.yours) { display: none; }
+.dls.mine { grid-template-columns: 1fr; max-width: 32rem; }
+.platform-note { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; color: var(--ink-soft); }
+.platform-note button {
+  font: inherit; font-weight: 700; color: var(--ink);
+  background: var(--sheet); border: 1px solid var(--ink); padding: .25rem .7rem; cursor: pointer;
+}
+.platform-note button:hover { background: var(--ink); color: var(--sheet); }
+
+/* --- other repos ------------------------------------------------------- */
+
+.table-wrap { overflow-x: auto; }
+.others { width: 100%; border-collapse: collapse; font-size: .93rem; }
+.others th { text-align: left; font-weight: 700; color: var(--ink-soft); padding: .5rem .8rem .5rem 0; border-bottom: 2px solid var(--ink); }
+.others td { padding: .5rem .8rem .5rem 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.others td:first-child { font-weight: 700; white-space: nowrap; }
+
+/* --- app pages --------------------------------------------------------- */
+
+.build { padding: 1rem 0; border-bottom: 1px solid var(--rule); }
+.build h3 { margin: 0 0 .5rem; font-size: 1.1rem; }
+.files { list-style: none; margin: 0; padding: 0; }
+.files li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .1rem 1rem; padding: .3rem 0; }
+.files .sum { grid-column: 1 / -1; color: var(--ink-soft); font-size: .75rem; overflow-wrap: anywhere; }
+
+/* --- footer ------------------------------------------------------------ */
+
+.foot { margin-top: 4rem; padding-top: 1.5rem; padding-bottom: 3rem; border-top: 4px solid var(--ink); color: var(--ink-soft); font-size: .88rem; }
+.foot p { max-width: var(--measure); }
+
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (max-width: 52rem) {
+  .app { grid-template-columns: 1fr; }
+  .dls { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tile { animation: ink .5s ease-out both; animation-delay: calc(var(--i, 0) * 12ms); }
+  @keyframes ink { from { opacity: 0; transform: scale(.4); } }
+}
