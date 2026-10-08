@@ -13,7 +13,7 @@ Environment=HOME=/srv/craft/home/builder
 Environment=RUSTUP_HOME=/srv/craft/toolchain/rustup
 Environment=CARGO_HOME=/srv/craft/toolchain/cargo
 # LLVM 19 first: the MSVC STL headers from xwin reject clang older than 19.
-Environment=PATH=/usr/lib/llvm-19/bin:/srv/craft/toolchain/cargo/bin:/usr/local/bin:/usr/bin:/bin
+Environment=PATH=/usr/local/lib/craft-llvm/bin:/usr/lib/llvm-19/bin:/srv/craft/toolchain/cargo/bin:/usr/local/bin:/usr/bin:/bin
 Environment=CARGO_BUILD_JOBS=8
 # sqlx query macros: use the repo's .sqlx cache instead of a live database.
 Environment=SQLX_OFFLINE=true

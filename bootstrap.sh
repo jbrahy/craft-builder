@@ -37,6 +37,10 @@ if ! command -v aws >/dev/null; then
   rm -rf -- /tmp/aws /tmp/awscli.zip
 fi
 
+# clang-cl is just clang under another name; Ubuntu's clang-19 doesn't ship it.
+install -d /usr/local/lib/craft-llvm/bin
+ln -sfn /usr/lib/llvm-19/bin/clang /usr/local/lib/craft-llvm/bin/clang-cl
+
 # --- host firewall ----------------------------------------------------------
 # Ubuntu OCI images ship an iptables REJECT rule in INPUT, so 80 and 443 must be
 # opened here as well as in the NSG. Same approach as reach-x/feedback.
