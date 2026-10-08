@@ -24,7 +24,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends \
   libxkbcommon-dev libwayland-dev libx11-dev libxrandr-dev libxi-dev \
   libgl1-mesa-dev libssl-dev libfontconfig-dev libasound2-dev libudev-dev caddy iptables-persistent \
   ninja-build golang-go libgtk-3-dev libwebkit2gtk-4.1-dev libsoup-3.0-dev \
-  libayatana-appindicator3-dev librsvg2-dev
+  libayatana-appindicator3-dev librsvg2-dev clang-19 lld-19 llvm-19
 
 if ! command -v nfpm >/dev/null; then
   curl -fsSL -o /tmp/nfpm.deb "https://github.com/goreleaser/nfpm/releases/download/v${NFPM_VERSION}/nfpm_${NFPM_VERSION}_amd64.deb"
