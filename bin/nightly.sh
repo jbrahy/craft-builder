@@ -32,6 +32,10 @@ mkdir -p "$GIT_PUBLIC" "$WORK" "$BUILDS" "$UPSTREAM" "$LOGS" "$DATA/status"
 # status line: repo <tab> step <tab> result (ok|fail|skip) <tab> note
 record() { printf '%s\t%s\t%s\t%s\n' "$1" "$2" "$3" "$4" >> "$STATUS"; }
 
+# Repo names and release tags come from upstream: they become paths and HTML,
+# so anything outside this set is refused.
+safe_name() { [[ $1 =~ ^[A-Za-z0-9][A-Za-z0-9._+-]*$ ]]; }
+
 gh_api() { curl -fsSL --retry 3 -H 'Accept: application/vnd.github+json' "https://api.github.com/$1"; }
 
 # Delete all but the newest $2 entries matching $1/<pattern>, refusing any
@@ -50,6 +54,8 @@ prune() {
 # --- 1. mirror --------------------------------------------------------------
 
 repos=$(gh_api "orgs/$ORG/repos?per_page=100&type=all" | jq -r '.[].name' | sort) || repos=
+for r in $repos; do safe_name "$r" || record "$r" list fail "unsafe repo name, skipped"; done
+repos=$(for r in $repos; do safe_name "$r" && echo "$r"; done)
 if [ -z "$repos" ]; then
   record "-" list fail "GitHub API repo listing failed"
   exit 1
@@ -151,6 +157,7 @@ for r in $repos; do
   rel=$(gh_api "repos/$ORG/$r/releases?per_page=1") || { record "$r" macos fail "release lookup failed"; continue; }
   tag=$(jq -r '.[0].tag_name // empty' <<<"$rel")
   [ -n "$tag" ] || continue
+  safe_name "$tag" || { record "$r" macos fail "unsafe tag name, skipped"; continue; }
   dest=$UPSTREAM/$r/$tag
   [ -f "$dest/.complete" ] && { record "$r" macos skip "$tag already mirrored"; continue; }
   assets=$(jq -r '.[0].assets[] | select(.name | test("macos|SHA256SUMS")) | .browser_download_url' <<<"$rel")
