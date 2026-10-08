@@ -6,15 +6,15 @@
 
   document.querySelectorAll(".tile").forEach(function (t, i) { t.style.setProperty("--i", i); });
 
-  if (!os) return;
+  var note = document.querySelector(".platform-note");
+  if (!os || !note) return;
   var lists = document.querySelectorAll(".dls");
   var any = false;
   lists.forEach(function (l) {
     var mine = l.querySelector('.dl[data-platform="' + os + '"]');
     if (mine && mine.querySelector(".file")) { mine.classList.add("yours"); l.classList.add("mine"); any = true; }
   });
-  var note = document.querySelector(".platform-note");
-  if (!any || !note) return;
+  if (!any) return;
   note.querySelector("[data-os-name]").textContent = names[os];
   note.hidden = false;
   note.querySelector("[data-show-all]").addEventListener("click", function () {
